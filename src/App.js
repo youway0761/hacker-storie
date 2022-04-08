@@ -1,7 +1,7 @@
 import React from "react";
 
 
-  
+
 const App = () => {
   const stories = [
     {
@@ -21,19 +21,19 @@ const App = () => {
       objectID: 1,
     },
   ];
-  
-      // A
+
+  // A
   const handleSearch = event => {
     // C
     console.log(event.target.value);
   };
-  
+
   return (
     <div>
       <h1>My Hacker Stories</h1>
-      <Search onSearch={handleSearch}/>
-      <hr/>
-      <List list={stories}/>
+      <Search onSearch={handleSearch} />
+      <hr />
+      <List list={stories} />
     </div>
   );
 }
@@ -42,10 +42,9 @@ const Search = (props) => {
   const handleChange = event => {
     setSearchTerm(event.target.value);
     //B
-    // eslint-disable-next-line react/prop-types
     props.onSearch(event);
   };
- 
+
   return (
     <div>
       <label htmlFor="search">Search: </label>
@@ -57,18 +56,18 @@ const Search = (props) => {
   );
 };
 
-const List = (props) => 
-  props.list.map(item => 
-    (
-      <div key={item.objectID}>
-        <span>
-          <a href={item.url}>{item.title}</a>
-        </span>
-        <span>{item.author}</span>
-        <span>{item.num_comments}</span>
-        <span>{item.points}</span>          
-      </div>
-    ));
+const List = (props) =>
+  props.list.map(item =>
+  (
+    <div key={item.objectID}>
+      <span>
+        <a href={item.url}>{item.title}</a>
+      </span>
+      <span>{item.author}</span>
+      <span>{item.num_comments}</span>
+      <span>{item.points}</span>
+    </div>
+  ));
 
 
 export default App;
