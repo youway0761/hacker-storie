@@ -19,7 +19,7 @@ const list = [
   },
   ];
   
-function App() {
+const App = () => {
    return (
     <div>
       <h1>My Hacker Stories</h1>
@@ -33,9 +33,9 @@ function App() {
   );
 }
 
-function List() {
-  return list.map(function(item) {
-    return(
+const List = () => 
+  list.map(item => 
+    (
       <div key={item.objectID}>
         <span>
           <a href={item.url}>{item.title}</a>
@@ -43,8 +43,8 @@ function List() {
         <span>{item.author}</span>
         <span>{item.num_comments}</span>
         <span>{item.points}</span>          
-      </div>);
-    });
-}
+      </div>
+    ));
+
 
 export default App;
