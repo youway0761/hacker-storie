@@ -1,30 +1,44 @@
 import React from "react";
 
-const welcome = {
-  greeting: 'Hey',
+const list = [
+  {
   title: 'React',
-};
-
-function getTitle(title) {
-  return title;
-}
-
-const wels = ['welcome', 'to', 'React', 'world', '!']
-
+  url: 'https://reactjs.org/',
+  author: 'Jordan Walke',
+  num_comments: 3,
+  points: 4,
+  objectID: 0,
+  },
+  {
+  title: 'Redux',
+  url: 'https://redux.js.org/',
+  author: 'Dan Abramov, Andrew Clark',
+  num_comments: 2,
+  points: 5,
+  objectID: 1,
+  },
+  ];
+  
 function App() {
-  let strs = '';
-  for (let str of wels) {
-    strs += str + ' ';
-  }
-
-  return (
+   return (
     <div>
-      <h1>{welcome.greeting} {welcome.title}</h1>
-      <h1>Hello {getTitle('React')}</h1>
-      <h1>{wels[0]} {wels[1]} {wels[2]} {wels[3]}{wels[4]}</h1>
-      <h1>{strs}</h1>
+      <h1>My Hacker Stories</h1>
+
       <label htmlFor="search">Search: </label>
       <input id="search" type="text" />
+
+      <hr/>
+      {list.map(function(item) {
+        return(
+          <div key={item.objectID}>
+            <span>
+              <a href={item.url}>{item.title}</a>
+            </span>
+            <span>{item.author}</span>
+            <span>{item.num_comments}</span>
+            <span>{item.points}</span>          
+          </div>);
+      })}
     </div>
   );
 }
