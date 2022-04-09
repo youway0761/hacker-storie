@@ -1,5 +1,24 @@
 import React from "react";
 
+const initialStories = [
+  {
+    title: 'React',
+    url: 'https://reactjs.org/',
+    author: 'Jordan Walke',
+    num_comments: 3,
+    points: 4,
+    objectID: 0,
+  },
+  {
+    title: 'Redux',
+    url: 'https://redux.js.org/',
+    author: 'Dan Abramov, Andrew Clark',
+    num_comments: 2,
+    points: 5,
+    objectID: 1,
+  },
+];
+
 const useSemiPersistentState = (key, initialState) => {
   const [value, setValue] = React.useState(
     localStorage.getItem(key) || initialState
@@ -14,26 +33,16 @@ const useSemiPersistentState = (key, initialState) => {
 
 
 const App = () => {
-  const stories = [
-    {
-      title: 'React',
-      url: 'https://reactjs.org/',
-      author: 'Jordan Walke',
-      num_comments: 3,
-      points: 4,
-      objectID: 0,
-    },
-    {
-      title: 'Redux',
-      url: 'https://redux.js.org/',
-      author: 'Dan Abramov, Andrew Clark',
-      num_comments: 2,
-      points: 5,
-      objectID: 1,
-    },
-  ];
-
   const [searchTerm, setSearchTerm] = useSemiPersistentState('search', 'React');
+
+  const [stories, setStories] = React.useState(initialStories);
+
+  const handleRemoveStory = item => {
+    const newStories = stories.filter(
+      story => item.objectID !== story.objectID
+    );
+    setStories(newStories);
+  };
 
   const handleSearch = event => {
     setSearchTerm(event.target.value);
@@ -57,7 +66,7 @@ const App = () => {
 
       <hr />
 
-      <List list={searchedStories} />
+      <List list={searchedStories} onRemoveItem={handleRemoveStory} />
     </div>
   );
 }
@@ -68,16 +77,16 @@ const InputWithLabel = ({ id, type = 'text', value, onInputChange, isFocused, ch
 
   // C
   React.useEffect(() => {
-    console.log('a');
-    console.log(isFocused);
-    console.log(inputRef.current);
+    // console.log('a');
+    // console.log(isFocused);
+    // console.log(inputRef.current);
     if (isFocused && inputRef.current) {
       // D
       inputRef.current.focus();
       //isFocused = true;
-      console.log('b');
-      console.log(isFocused);
-      console.log(inputRef.current);
+      //console.log('b');
+      //console.log(isFocused);
+      //console.log(inputRef.current);
     }
   }, [isFocused, inputRef.current]);
 
@@ -98,8 +107,8 @@ const InputWithLabel = ({ id, type = 'text', value, onInputChange, isFocused, ch
   );
 }
 
-const List = ({ list }) =>
-  list.map(item => <Item key={item.objectID} item={item} />);
+const List = ({ list, onRemoveItem }) =>
+  list.map(item => <Item key={item.objectID} item={item} onRemoveItem={onRemoveItem} />);
 /* const List = ({ list }) =>
   list.map(item => (
     <Item
@@ -114,7 +123,7 @@ const List = ({ list }) =>
 // list.map(item => <Item key={item.objectID} {...item} />);// 展开运算符
 // list.map(({ objectID, ...item }) => <Item key={objectID} {...item} />); //剩余运算符
 // const Item = ({ title, url, author, num_comments, points }) => (
-const Item = ({
+/* const Item = ({
   item: { //item: 对Item的prop item进行解构 
     title,
     url,
@@ -131,6 +140,22 @@ const Item = ({
     <span>{num_comments}</span>
     <span>{points}</span>
   </div>
-);
-
+); */
+const Item = ({ item, onRemoveItem }) => {
+  return (
+    <div>
+      <span>
+        <a href={item.url}>{item.title}</a>
+      </span>
+      <span>{item.author}</span>
+      <span>{item.num_comments}</span>
+      <span>{item.points}</span>
+      <span>
+        <button type="button" onClick={() => onRemoveItem(item)}>
+          Dismiss
+        </button>
+      </span>
+    </div>
+  );
+};
 export default App;
