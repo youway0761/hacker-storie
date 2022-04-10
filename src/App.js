@@ -1,6 +1,8 @@
 import React from "react";
 
-const initialStories = [
+const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
+
+/* const initialStories = [
   {
     title: 'React',
     url: 'https://reactjs.org/',
@@ -17,7 +19,7 @@ const initialStories = [
     points: 5,
     objectID: 1,
   },
-];
+]; */
 
 const storiesReducer = (state, action) => {
   switch (action.type) {
@@ -52,14 +54,14 @@ const storiesReducer = (state, action) => {
   }
 };
 
-const getAsyncStories = () =>
+/* const getAsyncStories = () =>
   // new Promise((resolve, reject) => setTimeout(reject, 2000));
   new Promise(resolve =>
     setTimeout(
       () => resolve({ data: { stories: initialStories } }),
       2000
     )
-  );
+  ); */
 
 const useSemiPersistentState = (key, initialState) => {
   const [value, setValue] = React.useState(
@@ -90,14 +92,14 @@ const App = () => {
     //setIsLoading(true);
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
 
-    getAsyncStories().then(result => {
-      dispatchStories({
-        type: 'STORIES_FETCH_SUCCESS',
-        payload: result.data.stories,
-      });
-
-      //setIsLoading(false);
-    })
+    fetch(`${API_ENDPOINT}react`) // B
+      .then(response => response.json()) // C
+      .then(result => {
+        dispatchStories({
+          type: 'STORIES_FETCH_SUCCESS',
+          payload: result.hits, // D
+        });
+      })
       .catch(() =>
         //setIsError(true));
         dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
