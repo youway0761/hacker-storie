@@ -92,23 +92,21 @@ const App = () => {
   //const [isError, setIsError] = React.useState(false);
 
   //React.useEffect(() => {
-  const handleFetchStories = React.useCallback(() => {
+  const handleFetchStories = React.useCallback(async () => {
     //if (searchTerm === '') return;
     if (!searchTerm) return;
 
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
 
-    axios.get(url)
-      .then(result => {
-        dispatchStories({
-          type: 'STORIES_FETCH_SUCCESS',
-          payload: result.hits,
-        });
-      })
-      .catch(() =>
-        //setIsError(true));
-        dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
-      );
+    const result = await axios.get(url);
+    try {
+      dispatchStories({
+        type: 'STORIES_FETCH_SUCCESS',
+        payload: result.data.hits,
+      });
+    } catch {
+      dispatchStories({ type: 'STORIES_FETCH_FAILURE' });
+    }
   }, [url]);
 
   React.useEffect(() => {
