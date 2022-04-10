@@ -88,7 +88,8 @@ const App = () => {
   //const [isLoading, setIsLoading] = React.useState(false);
   //const [isError, setIsError] = React.useState(false);
 
-  React.useEffect(() => {
+  //React.useEffect(() => {
+  const handleFetchStories = React.useCallback(() => {
     //if (searchTerm === '') return;
     if (!searchTerm) return;
 
@@ -107,6 +108,10 @@ const App = () => {
         dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
       );
   }, [searchTerm]);
+
+  React.useEffect(() => {
+    handleFetchStories(); // C
+  }, [handleFetchStories]); // D
 
   const handleRemoveStory = item => {
     dispatchStories({
