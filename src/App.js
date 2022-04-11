@@ -16,6 +16,38 @@ font-weight: 300;
 letter-spacing: 2px;
 `;
 
+const StyledColumn = styled.span`
+padding: 0 5px;
+white-space: nowrap;
+overflow: hidden;
+white-space: nowrap;
+text-overflow: ellipsis;
+a {
+color: inherit;
+}
+width: ${props => props.width};
+`;
+
+const StyledButton = styled.button`
+background: transparent;
+border: 1px solid #171212;
+padding: 5px;
+cursor: pointer;
+transition: all 0.1s ease-in;
+&:hover {
+background: #171212;
+color: #ffffff;
+}
+`;
+
+const StyledButtonSmall = styled(StyledButton)`
+padding: 5px;
+`;
+
+const StyledButtonLarge = styled(StyledButton)`
+padding: 10px;
+`;
+
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
 const storiesReducer = (state, action) => {
@@ -163,9 +195,9 @@ const SearchForm = ({
     >
       <strong>Search:</strong>
     </InputWithLabel>
-    <button type="submit" disabled={!searchTerm} className={`${styles.button} ${styles.buttonLarge}`}>
+    <StyledButtonLarge type="submit" disabled={!searchTerm}>
       Submit
-    </button>
+    </StyledButtonLarge>
   </form>
 );
 
@@ -243,16 +275,16 @@ const List = ({ list, onRemoveItem }) =>
 const Item = ({ item, onRemoveItem }) => {
   return (
     <div className={styles.item}>
-      <span style={{ width: '40%' }}>
+      <StyledColumn width='40%'>
         <a href={item.url}>{item.title}</a>
-      </span>
+      </StyledColumn>
       <span style={{ width: '30%' }}>{item.author}</span>
       <span style={{ width: '10%' }}>{item.num_comments}</span>
       <span style={{ width: '10%' }}>{item.points}</span>
       <span style={{ width: '10%' }}>
-        <button type="button" onClick={() => onRemoveItem(item)} className={`${styles.button} ${styles.buttonSmall}`}>
+        <StyledButtonSmall type="button" onClick={() => onRemoveItem(item)}>
           Dismiss
-        </button>
+        </StyledButtonSmall>
       </span>
     </div>
   );
