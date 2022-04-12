@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import styles from "./App.module.css";
 import styled from 'styled-components';
+import { ReactComponent as Check } from './check.svg';
 
 const StyledContainer = styled.div`
 height: 100vw;
@@ -35,8 +36,12 @@ padding: 5px;
 cursor: pointer;
 transition: all 0.1s ease-in;
 &:hover {
-background: #171212;
-color: #ffffff;
+  background: #171212;
+  color: #ffffff;
+};
+&:hover > svg > g {
+fill: #ffffff;
+stroke: #ffffff;
 }
 `;
 
@@ -240,38 +245,7 @@ const InputWithLabel = ({ id, type = 'text', value, onInputChange, isFocused, ch
 
 const List = ({ list, onRemoveItem }) =>
   list.map(item => <Item key={item.objectID} item={item} onRemoveItem={onRemoveItem} />);
-/* const List = ({ list }) =>
-  list.map(item => (
-    <Item
-      key={item.objectID}
-      title={item.title}
-      url={item.url}
-      author={item.author}
-      num_comments={item.num_comments}
-      points={item.points}
-    />
-  )); */
-// list.map(item => <Item key={item.objectID} {...item} />);// 展开运算符
-// list.map(({ objectID, ...item }) => <Item key={objectID} {...item} />); //剩余运算符
-// const Item = ({ title, url, author, num_comments, points }) => (
-/* const Item = ({
-  item: { //item: 对Item的prop item进行解构 
-    title,
-    url,
-    author,
-    num_comments,
-    points,
-  },
-}) => (
-  <div>
-    <span>
-      <a href={url}>{title}</a>
-    </span>
-    <span>{author}</span>
-    <span>{num_comments}</span>
-    <span>{points}</span>
-  </div>
-); */
+
 const Item = ({ item, onRemoveItem }) => {
   return (
     <div className={styles.item}>
@@ -283,10 +257,13 @@ const Item = ({ item, onRemoveItem }) => {
       <span style={{ width: '10%' }}>{item.points}</span>
       <span style={{ width: '10%' }}>
         <StyledButtonSmall type="button" onClick={() => onRemoveItem(item)}>
-          Dismiss
+          <Check height="18px" width="18px" />
         </StyledButtonSmall>
       </span>
     </div>
   );
 };
+
 export default App;
+
+export { SearchForm, InputWithLabel, List, Item };
