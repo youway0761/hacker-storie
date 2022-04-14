@@ -1,57 +1,8 @@
 import React from "react";
 import axios from "axios";
-import styles from "./App.module.css";
-import styled from 'styled-components';
-import { ReactComponent as Check } from './check.svg';
-
-const StyledContainer = styled.div`
-height: 100vw;
-padding: 20px;
-background: #83a4d4;
-background: linear-gradient(to left, #b6fbff, #83a4d4);
-color: #171212;
-`;
-const StyledHeadlinePrimary = styled.h1`
-font-size: 48px;
-font-weight: 300;
-letter-spacing: 2px;
-`;
-
-const StyledColumn = styled.span`
-padding: 0 5px;
-white-space: nowrap;
-overflow: hidden;
-white-space: nowrap;
-text-overflow: ellipsis;
-a {
-color: inherit;
-}
-width: ${props => props.width};
-`;
-
-const StyledButton = styled.button`
-background: transparent;
-border: 1px solid #171212;
-padding: 5px;
-cursor: pointer;
-transition: all 0.1s ease-in;
-&:hover {
-  background: #171212;
-  color: #ffffff;
-};
-&:hover > svg > g {
-fill: #ffffff;
-stroke: #ffffff;
-}
-`;
-
-const StyledButtonSmall = styled(StyledButton)`
-padding: 5px;
-`;
-
-const StyledButtonLarge = styled(StyledButton)`
-padding: 10px;
-`;
+import List from "./List";
+import SearchForm from "./SearchForm";
+import { StyledContainer, StyledHeadlinePrimary } from "./style";
 
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
@@ -88,15 +39,6 @@ const storiesReducer = (state, action) => {
   }
 };
 
-/* const getAsyncStories = () =>
-  // new Promise((resolve, reject) => setTimeout(reject, 2000));
-  new Promise(resolve =>
-    setTimeout(
-      () => resolve({ data: { stories: initialStories } }),
-      2000
-    )
-  ); */
-
 const useSemiPersistentState = (key, initialState) => {
   const [value, setValue] = React.useState(
     localStorage.getItem(key) || initialState
@@ -120,13 +62,7 @@ const App = () => {
     { data: [], isLoading: false, isError: false }
   );
 
-  //const [stories, setStories] = React.useState([]);
-  //const [isLoading, setIsLoading] = React.useState(false);
-  //const [isError, setIsError] = React.useState(false);
-
-  //React.useEffect(() => {
   const handleFetchStories = React.useCallback(async () => {
-    //if (searchTerm === '') return;
     if (!searchTerm) return;
 
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
@@ -143,8 +79,8 @@ const App = () => {
   }, [url]);
 
   React.useEffect(() => {
-    handleFetchStories(); // C
-  }, [handleFetchStories]); // D
+    handleFetchStories();
+  }, [handleFetchStories]);
 
   const handleRemoveStory = item => {
     dispatchStories({
@@ -161,9 +97,6 @@ const App = () => {
     setUrl(`${API_ENDPOINT}${searchTerm}`);
     event.preventDefault();
   };
-
-  //const searchedStories = stories.data.filter((story) =>
-  //story.title.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
     <StyledContainer>
@@ -186,84 +119,5 @@ const App = () => {
   );
 }
 
-const SearchForm = ({
-  searchTerm,
-  onSearchInput,
-  onSearchSubmit,
-}) => (
-  <form onSubmit={onSearchSubmit} className={styles.searchForm}>
-    <InputWithLabel
-      id="search"
-      value={searchTerm}
-      isFocused
-      onInputChange={onSearchInput}
-    >
-      <strong>Search:</strong>
-    </InputWithLabel>
-    <StyledButtonLarge type="submit" disabled={!searchTerm}>
-      Submit
-    </StyledButtonLarge>
-  </form>
-);
-
-const InputWithLabel = ({ id, type = 'text', value, onInputChange, isFocused, children, }) => {
-  // A
-  const inputRef = React.useRef();
-
-  // C
-  React.useEffect(() => {
-    // console.log('a');
-    // console.log(isFocused);
-    // console.log(inputRef.current);
-    if (isFocused && inputRef.current) {
-      // D
-      inputRef.current.focus();
-      //isFocused = true;
-      //console.log('b');
-      //console.log(isFocused);
-      //console.log(inputRef.current);
-    }
-  }, [isFocused, inputRef.current]);
-
-  return (
-    <>
-      <label htmlFor={id} className={styles.label}>{children}</label>
-      &nbsp;
-      {/*B*/}
-      <input
-        ref={inputRef}
-        id={id}
-        type={type}
-        value={value}
-        //autoFocus={isFocused}
-        onChange={onInputChange}
-        className={styles.input}
-      />
-    </>
-  );
-}
-
-const List = ({ list, onRemoveItem }) =>
-  list.map(item => <Item key={item.objectID} item={item} onRemoveItem={onRemoveItem} />);
-
-const Item = ({ item, onRemoveItem }) => {
-  return (
-    <div className={styles.item}>
-      <StyledColumn width='40%'>
-        <a href={item.url}>{item.title}</a>
-      </StyledColumn>
-      <span style={{ width: '30%' }}>{item.author}</span>
-      <span style={{ width: '10%' }}>{item.num_comments}</span>
-      <span style={{ width: '10%' }}>{item.points}</span>
-      <span style={{ width: '10%' }}>
-        <StyledButtonSmall type="button" onClick={() => onRemoveItem(item)}>
-          <Check height="18px" width="18px" />
-        </StyledButtonSmall>
-      </span>
-    </div>
-  );
-};
-
 export default App;
 
-export { SearchForm, InputWithLabel, List, Item };
