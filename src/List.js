@@ -52,7 +52,7 @@ const List = ({ list, onRemoveItem }) => {
             </div>
             {sortedList.map(item => (
                 <Item key={item.objectID} item={item} onRemoveItem={onRemoveItem} />
-            ))};
+            ))}
         </div>
     );
 };
